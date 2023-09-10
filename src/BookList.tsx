@@ -2,7 +2,24 @@
 import { Table } from "flowbite-react";
 import { Badge } from "flowbite-react";
 
-export default function BookList({ data, handleUpdate, handleDelete }) {
+interface dataType {
+  id: number;
+  bookTitle: string;
+  bookAuthor: string;
+  read: boolean;
+}
+
+type AppProps = {
+  data: Array<dataType>;
+  handleUpdate(id: number): void;
+  handleDelete(id: number): void;
+};
+
+export default function BookList({
+  data,
+  handleUpdate,
+  handleDelete,
+}: AppProps) {
   return (
     <Table striped>
       <Table.Head>

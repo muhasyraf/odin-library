@@ -1,16 +1,16 @@
 "use client";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import "./App.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import BookList from "./BookList";
-import { uid } from "uid";
 
 function App() {
+  const name = "Muhammad Asyraf";
   const [books, setBooks] = useState([
     {
       id: 1,
       bookTitle: "Math",
-      bookAuthor: "Dr Heisenberg",
+      bookAuthor: name,
       read: true,
     },
     {
@@ -20,79 +20,79 @@ function App() {
       read: false,
     },
   ]);
-  const [formInput, setFormInput] = useState({
-    bookTitle: "",
-    bookAuthor: "",
-    read: false,
-  });
+  const [id, setId] = useState(3);
 
+  const [bookTitle, setBookTitle] = useState("");
+  const [bookAuthor, setbookAuthor] = useState("");
   const [read, setRead] = useState(true);
 
   const [isUpdate, setUpdate] = useState({
-    id: null,
+    id: 0,
     status: false,
   });
 
-  const handleRead = (e) => {
+  const handleRead = () => {
     setRead(!read);
-    // console.log(read);
-    formInput.read = read;
   };
 
-  const handleChange = (e) => {
-    const data = { ...formInput };
-    data[e.target.name] = e.target.value;
-    setFormInput(data);
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBookTitle(e.target.value);
+  };
+  const handleAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setbookAuthor(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     const data = [...books];
-
     if (isUpdate.status) {
       for (const val of data) {
         if (val.id === isUpdate.id) {
-          val.bookTitle = formInput.bookTitle;
-          val.bookAuthor = formInput.bookAuthor;
-          val.read = formInput.read;
-          // console.log(formInput.read);
+          val.bookTitle = bookTitle;
+          val.bookAuthor = bookAuthor;
+          val.read = read;
         }
       }
     } else {
+      setId(id + 1);
       data.push({
-        id: uid(),
-        bookTitle: formInput.bookTitle,
-        bookAuthor: formInput.bookAuthor,
-        read: formInput.read,
+        id: id,
+        bookTitle: bookTitle,
+        bookAuthor: bookAuthor,
+        read: read,
       });
-      // console.log(formInput.read);
+      console.log(id);
     }
 
     setUpdate({
-      id: null,
+      id: 0,
       status: false,
     });
     setBooks(data);
-    setFormInput({ bookTitle: "", bookAuthor: "", read: formInput.read });
+    setBookTitle("");
+    setbookAuthor("");
   };
 
-  function handleUpdate(id) {
+  function handleUpdate(id: number) {
     const data = [...books];
     const foundData = data.find((book) => book.id === id);
+    if (foundData) {
+      setBookTitle(foundData.bookTitle);
+      setbookAuthor(foundData.bookAuthor);
+      setRead(foundData.read);
+      console.log(id);
+    } else {
+      console.log("data not found");
+      console.log(id);
+    }
 
-    setFormInput({
-      bookTitle: foundData.bookTitle,
-      bookAuthor: foundData.bookAuthor,
-      read: formInput.read,
-    });
     setUpdate({
       id: id,
       status: true,
     });
   }
 
-  function handleDelete(id) {
+  function handleDelete(id: number) {
     const data = [...books];
     const filteredData = data.filter((book) => book.id != id);
     setBooks(filteredData);
@@ -121,9 +121,9 @@ function App() {
               <TextInput
                 id="bookTitle"
                 name="bookTitle"
-                value={formInput.bookTitle}
+                value={bookTitle}
                 onChange={(e) => {
-                  handleChange(e);
+                  handleTitleChange(e);
                 }}
                 required
                 shadow
@@ -141,9 +141,9 @@ function App() {
               <TextInput
                 id="bookAuthor"
                 name="bookAuthor"
-                value={formInput.bookAuthor}
+                value={bookAuthor}
                 onChange={(e) => {
-                  handleChange(e);
+                  handleAuthorChange(e);
                 }}
                 required
                 shadow
@@ -155,8 +155,8 @@ function App() {
                 id="read"
                 name="read"
                 value="true"
-                onChange={(e) => {
-                  handleRead(e);
+                onChange={() => {
+                  handleRead();
                 }}
               />
               <Label
