@@ -24,7 +24,7 @@ function App() {
 
   const [bookTitle, setBookTitle] = useState("");
   const [bookAuthor, setbookAuthor] = useState("");
-  const [read, setRead] = useState(true);
+  const [read, setRead] = useState(false);
 
   const [isUpdate, setUpdate] = useState({
     id: 0,
@@ -69,6 +69,7 @@ function App() {
       status: false,
     });
     setBooks(data);
+    console.log(read);
     setBookTitle("");
     setbookAuthor("");
   };
@@ -79,7 +80,7 @@ function App() {
     if (foundData) {
       setBookTitle(foundData.bookTitle);
       setbookAuthor(foundData.bookAuthor);
-      setRead(foundData.read);
+      setRead(read);
       console.log(id);
     } else {
       console.log("data not found");
@@ -100,7 +101,9 @@ function App() {
 
   return (
     <div className="mt-10 flex flex-col justify-center items-center container mx-auto">
-      <h1 className="text-5xl font-bold underline">The Odin Project</h1>
+      <h1 className="text-5xl font-bold underline">
+        The Odin Project Assignment
+      </h1>
       <h3 className="mt-2 text-3xl">Project: Library</h3>
       <div className="mt-4 grid grid-rows-2 md:grid-cols-3 w-full">
         <div className="md:col-span-1 p-2 flex items-top justify-center">
@@ -154,7 +157,7 @@ function App() {
               <Checkbox
                 id="read"
                 name="read"
-                value="true"
+                value="false"
                 onChange={() => {
                   handleRead();
                 }}
